@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{django_url}}/api/transactions/?status=SUCCESS"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+queryParams:
+  status: SUCCESS
+order: 2000

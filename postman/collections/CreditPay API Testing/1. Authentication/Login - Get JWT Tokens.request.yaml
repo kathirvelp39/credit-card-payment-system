@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{django_url}}/api/token/"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 200) {
+        const data = pm.response.json();
+        if (data.access) pm.collectionVariables.set('access_token', data.access);
+        if (data.refresh) pm.collectionVariables.set('refresh_token', data.refresh);
+      }
+      pm.test('Login returns success', function () { pm.expect(pm.response.code).to.eql(200); });
+    language: text/javascript
+order: 2000

@@ -1,0 +1,453 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account | CreditPay{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .register-page {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 520px;
+        background: #ffffff;
+        padding: 45px;
+        border-radius: 24px;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.12);
+    }
+
+    .register-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #eff6ff;
+        color: #2563eb;
+
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .register-card h2 {
+        font-size: 30px;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .register-description {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .field {
+        margin-bottom: 20px;
+    }
+
+    .field label {
+        display: block;
+        margin-bottom: 8px;
+
+        font-size: 12px;
+        font-weight: 600;
+
+        color: #334155;
+    }
+
+    .field input {
+        width: 100%;
+
+        padding: 14px 15px;
+
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+
+        outline: none;
+
+        font-family: inherit;
+        font-size: 13px;
+
+        transition: 0.25s;
+    }
+
+    .field input:focus {
+        border-color: #2563eb;
+
+        box-shadow:
+            0 0 0 4px rgba(37, 99, 235, 0.08);
+    }
+
+    .password-info {
+        margin-top: 7px;
+
+        color: #94a3b8;
+
+        font-size: 11px;
+    }
+
+    .register-btn {
+        width: 100%;
+
+        padding: 14px;
+
+        border: none;
+        border-radius: 11px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #3b82f6
+            );
+
+        color: white;
+
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: 0.25s;
+    }
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 12px 25px rgba(37, 99, 235, 0.28);
+    }
+
+    .register-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .register-footer {
+        text-align: center;
+
+        margin-top: 25px;
+
+        color: #64748b;
+
+        font-size: 12px;
+    }
+
+    .register-footer a {
+        color: #2563eb;
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+    .register-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .security-note {
+        margin-top: 25px;
+
+        padding: 12px;
+
+        border-radius: 10px;
+
+        background: #f8fafc;
+
+        border: 1px solid #e2e8f0;
+
+        display: flex;
+        align-items: center;
+
+        gap: 9px;
+
+        color: #64748b;
+
+        font-size: 11px;
+    }
+
+    .security-note i {
+        color: #10b981;
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block nav_links %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <div class="register-icon">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+        </div>
+
+
+        <h2>Create your account</h2>
+
+        <p class="register-description">
+
+            Join CreditPay and securely manage your cards,
+            payments and transactions from one place.
+
+        </p>
+
+
+        <form id="registerForm">
+
+            <!-- Username -->
+
+            <div class="field">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="field">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Minimum 8 characters"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                >
+
+                <div class="password-info">
+
+                    Password must contain at least 8 characters.
+
+                </div>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="register-btn"
+            >
+
+                <i class="fa-solid fa-user-check"></i>
+
+                &nbsp;
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <div class="security-note">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            Your password is securely encrypted before storage.
+
+        </div>
+
+
+        <div class="register-footer">
+
+            Already have an account?
+
+            <a href="/login/">
+                Sign in
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+
+    registerForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const username =
+                document.getElementById("username")
+                    .value
+                    .trim();
+
+
+            const email =
+                document.getElementById("email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document.getElementById("password")
+                    .value;
+
+
+            const button =
+                registerForm.querySelector("button");
+
+
+            button.disabled = true;
+
+
+            button.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                &nbsp;
+                Creating Account...
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/accounts/register/",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                username: username,
+                                email: email,
+                                password: password
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (response.ok) {
+
+                    alert(
+                        "Account created successfully!"
+                    );
+
+
+                    window.location.href =
+                        "/login/";
+
+                    return;
+                }
+
+
+                let errorMessage =
+                    "Registration failed.";
+
+
+                if (data.errors) {
+
+                    errorMessage =
+                        Object.values(data.errors)
+                            .flat()
+                            .join("\n");
+                }
+
+
+                alert(errorMessage);
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to the server."
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-user-check"></i>
+                    &nbsp;
+                    Create Account
+                `;
+            }
+
+        }
+    );
+
+</script>
+
+{% endblock %}

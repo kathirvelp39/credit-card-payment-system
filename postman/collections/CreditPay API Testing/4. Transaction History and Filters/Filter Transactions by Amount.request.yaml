@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{django_url}}/api/transactions/?min_amount=100&max_amount=5000"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+queryParams:
+  min_amount: "100"
+  max_amount: "5000"
+order: 3000

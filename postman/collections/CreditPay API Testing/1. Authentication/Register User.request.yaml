@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{django_url}}/api/accounts/register/"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "username": "{{username}}",
+      "email": "{{email}}",
+      "password": "{{password}}"
+    }
+order: 1000

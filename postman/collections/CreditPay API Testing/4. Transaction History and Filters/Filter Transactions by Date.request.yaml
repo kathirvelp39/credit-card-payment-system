@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{django_url}}/api/transactions/?from_date=2026-01-01&to_date=2026-12-31"
+method: GET
+headers:
+  Authorization: Bearer {{access_token}}
+queryParams:
+  from_date: 2026-01-01
+  to_date: 2026-12-31
+order: 4000

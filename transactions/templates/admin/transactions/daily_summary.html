@@ -1,0 +1,40 @@
+
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Daily Payment Summary</h1>
+
+<table style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th style="padding: 10px;">Date</th>
+            <th style="padding: 10px;">Total Transactions</th>
+            <th style="padding: 10px;">Successful</th>
+            <th style="padding: 10px;">Failed</th>
+            <th style="padding: 10px;">Successful Amount</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in daily_summaries %}
+        <tr>
+            <td style="padding: 10px;">{{ item.day|date:"d M Y" }}</td>
+            <td style="padding: 10px;">{{ item.total_transactions }}</td>
+            <td style="padding: 10px;">{{ item.successful_payments }}</td>
+            <td style="padding: 10px;">{{ item.failed_payments }}</td>
+            <td style="padding: 10px;">₹{{ item.successful_amount|default:0|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No transactions found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p style="margin-top: 20px;">
+    <a href="{% url 'admin:transactions_transaction_changelist' %}">
+        Back to Transactions
+    </a>
+</p>
+{% endblock %}

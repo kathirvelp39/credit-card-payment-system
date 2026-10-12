@@ -1,0 +1,3443 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Dashboard | CreditPay
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!-- =========================
+
+         DASHBOARD HEADER
+
+    ========================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <span class="dashboard-label">
+
+                CREDITPAY DASHBOARD
+
+            </span>
+
+            <h1>
+
+                Welcome back,
+
+                <span id="usernameText">User</span>
+
+                👋
+
+            </h1>
+
+            <p>
+
+                Manage your cards, payments and transactions
+
+                from one secure place.
+
+            </p>
+
+        </div>
+
+        <button
+
+            type="button"
+
+            class="logout-btn"
+
+            onclick="logoutUser()"
+
+        >
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </button>
+
+    </div>
+
+    <!-- =========================
+
+         SUMMARY CARDS
+
+    ========================== -->
+
+    <div class="summary-grid">
+
+        <!-- SAVED CARDS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon blue">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Saved Cards
+
+                </span>
+
+                <h2 id="cardCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- TOTAL PAYMENTS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon green">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Total Payments
+
+                </span>
+
+                <h2 id="totalPayments">
+
+                    ₹0.00
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- TRANSACTIONS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon orange">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Transactions
+
+                </span>
+
+                <h2 id="transactionCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- ACCOUNT STATUS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon purple">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Account Status
+
+                </span>
+
+                <h2 class="active-status">
+
+                    Active
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+
+         MAIN DASHBOARD GRID
+
+    ========================== -->
+
+    <div class="dashboard-grid">
+
+        <!-- =========================
+
+             MY CARDS
+
+        ========================== -->
+
+        <section
+
+            id="cards"
+
+            class="dashboard-card"
+
+        >
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+
+                        PAYMENT METHODS
+
+                    </span>
+
+                    <h3>
+
+                        My Cards
+
+                    </h3>
+
+                </div>
+
+                <button
+
+                    type="button"
+
+                    class="add-card-btn"
+
+                    onclick="showCardMessage()"
+
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Card
+
+                </button>
+
+            </div>
+
+            <div id="cardsContainer">
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-regular fa-credit-card"></i>
+
+                    </div>
+
+                    <h4>
+
+                        Loading cards...
+
+                    </h4>
+
+                    <p>
+
+                        Please wait.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+
+             QUICK PAYMENT
+
+        ========================== -->
+
+        <section class="dashboard-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+
+                        QUICK ACTION
+
+                    </span>
+
+                    <h3>
+
+                        Make a Payment
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="payment-box">
+
+                <div class="payment-icon">
+
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+
+                </div>
+
+                <h3>
+
+                    Pay your credit card
+
+                </h3>
+
+                <p>
+
+                    Make a secure payment using
+
+                    your saved card.
+
+                </p>
+
+                <button
+
+                    type="button"
+
+                    class="payment-btn"
+
+                    onclick="showPaymentMessage()"
+
+                >
+
+                    Make Payment
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- =========================
+
+         RECENT TRANSACTIONS
+
+    ========================== -->
+
+    <section class="dashboard-card transactions-card">
+
+        <div class="card-heading">
+
+            <div>
+
+                <span>
+
+                    ACTIVITY
+
+                </span>
+
+                <h3>
+
+                    Recent Transactions
+
+                </h3>
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="view-all-btn"
+
+                onclick="showTransactionMessage()"
+
+            >
+
+                View All
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+        </div>
+
+        <div id="recentTransactions">
+
+            <div class="transaction-empty">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <h4>
+
+                    Loading transactions...
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+
+         ADD CARD MODAL
+
+    ========================== -->
+
+    <div
+
+        class="modal-overlay"
+
+        id="cardModal"
+
+    >
+
+        <div class="card-modal">
+
+            <button
+
+                type="button"
+
+                class="modal-close"
+
+                onclick="closeCardModal()"
+
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+            </div>
+
+            <h2>
+
+                Add New Card
+
+            </h2>
+
+            <p class="modal-description">
+
+                Add your credit or debit card securely.
+
+            </p>
+
+            <form id="cardForm">
+
+                <div class="modal-field">
+
+                    <label for="cardType">
+
+                        Card Type
+
+                    </label>
+
+                    <select
+
+                        id="cardType"
+
+                        required
+
+                    >
+
+                        <option value="CREDIT">
+
+                            Credit Card
+
+                        </option>
+
+                        <option value="DEBIT">
+
+                            Debit Card
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="modal-field">
+
+                    <label for="cardNumber">
+
+                        Card Number
+
+                    </label>
+
+                    <input
+
+                        type="text"
+
+                        id="cardNumber"
+
+                        placeholder="1234 5678 1234 5678"
+
+                        maxlength="19"
+
+                        inputmode="numeric"
+
+                        autocomplete="off"
+
+                        required
+
+                    >
+
+                </div>
+
+                <div class="card-security-note">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span>
+
+                        Your full card number is not stored.
+
+                    </span>
+
+                </div>
+
+                <button
+
+                    type="submit"
+
+                    class="save-card-btn"
+
+                    id="saveCardButton"
+
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Card
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+
+         PAYMENT MODAL
+
+    ========================== -->
+
+    <div
+
+        class="modal-overlay"
+
+        id="paymentModal"
+
+    >
+
+        <div class="card-modal payment-modal">
+
+            <button
+
+                type="button"
+
+                class="modal-close"
+
+                onclick="closePaymentModal()"
+
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon payment-modal-icon">
+
+                <i class="fa-solid fa-money-bill-transfer"></i>
+
+            </div>
+
+            <h2>
+
+                Make Payment
+
+            </h2>
+
+            <p class="modal-description">
+
+                Select your card and enter the payment amount.
+
+            </p>
+
+            <form id="paymentForm">
+
+                <!-- CARD -->
+
+                <div class="modal-field">
+
+                    <label for="paymentCard">
+
+                        Select Card
+
+                    </label>
+
+                    <select
+
+                        id="paymentCard"
+
+                        required
+
+                    >
+
+                        <option value="">
+
+                            Select a card
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- AMOUNT -->
+
+                <div class="modal-field">
+
+                    <label for="paymentAmount">
+
+                        Payment Amount
+
+                    </label>
+
+                    <input
+
+                        type="number"
+
+                        id="paymentAmount"
+
+                        placeholder="Enter amount"
+
+                        min="1"
+
+                        step="0.01"
+
+                        required
+
+                    >
+
+                </div>
+
+                <div class="payment-security-note">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span>
+
+                        Payment is processed securely.
+
+                    </span>
+
+                </div>
+
+                <button
+
+                    type="submit"
+
+                    class="save-card-btn"
+
+                    id="paymentButton"
+
+                >
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Pay Now
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================
+
+   DASHBOARD
+
+========================= \*/
+
+.dashboard-page {
+
+    padding: 25px 0 50px;
+
+}
+
+/* =========================
+
+   HEADER
+
+========================= \*/
+
+.dashboard-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+
+}
+
+.dashboard-label {
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #2563eb;
+
+    letter-spacing: 1.2px;
+
+}
+
+.dashboard-header h1 {
+
+    margin: 8px 0;
+
+    font-size: 32px;
+
+    color: #0f172a;
+
+    letter-spacing: -1px;
+
+}
+
+.dashboard-header h1 span {
+
+    color: #2563eb;
+
+}
+
+.dashboard-header p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+.logout-btn {
+
+    border: 1px solid #e2e8f0;
+
+    background: white;
+
+    color: #475569;
+
+    padding: 11px 17px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: .2s;
+
+}
+
+.logout-btn:hover {
+
+    border-color: #ef4444;
+
+    color: #ef4444;
+
+}
+
+/* =========================
+
+   SUMMARY CARDS
+
+========================= \*/
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+
+}
+
+.summary-card {
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 0 8px 25px rgba(15,23,42,.04);
+
+}
+
+.summary-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+
+}
+
+.summary-icon.blue {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+.summary-icon.green {
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+}
+
+.summary-icon.orange {
+
+    background: #fff7ed;
+
+    color: #ea580c;
+
+}
+
+.summary-icon.purple {
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+}
+
+.summary-card span {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-bottom: 5px;
+
+}
+
+.summary-card h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 23px;
+
+}
+
+.active-status {
+
+    color: #059669 !important;
+
+    font-size: 17px !important;
+
+}
+
+/* =========================
+
+   MAIN GRID
+
+========================= \*/
+
+.dashboard-grid {
+
+    display: grid;
+
+    grid-template-columns: 1.3fr .7fr;
+
+    gap: 22px;
+
+    margin-bottom: 22px;
+
+}
+
+.dashboard-card {
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    box-shadow: 0 8px 25px rgba(15,23,42,.04);
+
+}
+
+.card-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+
+}
+
+.card-heading span {
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+.card-heading h3 {
+
+    margin: 5px 0 0;
+
+    color: #0f172a;
+
+    font-size: 18px;
+
+}
+
+/* =========================
+
+   ADD CARD BUTTON
+
+========================= \*/
+
+.add-card-btn {
+
+    border: none;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    padding: 9px 13px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    font-size: 11px;
+
+}
+
+.add-card-btn:hover {
+
+    background: #dbeafe;
+
+}
+
+/* =========================
+
+   EMPTY STATE
+
+========================= \*/
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 30px 15px;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 14px;
+
+}
+
+.empty-icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 19px;
+
+}
+
+.empty-state h4 {
+
+    margin: 15px 0 6px;
+
+    color: #334155;
+
+    font-size: 14px;
+
+}
+
+.empty-state p {
+
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+/* =========================
+
+   SAVED CARD
+
+========================= \*/
+
+.saved-card {
+
+    position: relative;
+
+    min-height: 175px;
+
+    padding: 22px;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+
+        135deg,
+
+        #0f172a,
+
+        #1e3a8a
+
+    );
+
+    color: white;
+
+    box-shadow: 0 15px 30px rgba(15,23,42,.18);
+
+    margin-bottom: 14px;
+
+}
+
+.saved-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+.saved-card-chip {
+
+    width: 38px;
+
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(255,255,255,.16);
+
+    color: #dbeafe;
+
+    font-size: 14px;
+
+}
+
+.card-type {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: #bfdbfe;
+
+}
+
+.saved-card-number {
+
+    margin-top: 30px;
+
+    font-size: 19px;
+
+    letter-spacing: 2px;
+
+    font-weight: 600;
+
+}
+
+.saved-card-bottom {
+
+    margin-top: 20px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+}
+
+.saved-card-bottom small {
+
+    display: block;
+
+    font-size: 8px;
+
+    color: #93c5fd;
+
+    margin-bottom: 3px;
+
+}
+
+.saved-card-bottom strong {
+
+    font-size: 11px;
+
+    color: white;
+
+}
+
+.delete-card-btn {
+
+    width: 32px;
+
+    height: 32px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.1);
+
+    color: #fecaca;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+.delete-card-btn:hover {
+
+    background: #ef4444;
+
+    color: white;
+
+}
+
+/* =========================
+
+   PAYMENT
+
+========================= \*/
+
+.payment-box {
+
+    text-align: center;
+
+    padding: 12px 10px 10px;
+
+}
+
+.payment-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 20px;
+
+}
+
+.payment-box h3 {
+
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 16px;
+
+}
+
+.payment-box p {
+
+    margin: 0 auto 20px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    max-width: 240px;
+
+}
+
+.payment-btn {
+
+    border: none;
+
+    background: linear-gradient(
+
+        135deg,
+
+        #2563eb,
+
+        #3b82f6
+
+    );
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition: .2s;
+
+}
+
+.payment-btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 8px 18px rgba(37,99,235,.22);
+
+}
+
+/* =========================
+
+   TRANSACTIONS
+
+========================= \*/
+
+.transactions-card {
+
+    min-height: 220px;
+
+}
+
+.view-all-btn {
+
+    border: none;
+
+    background: transparent;
+
+    color: #2563eb;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+.transaction-empty {
+
+    text-align: center;
+
+    padding: 25px;
+
+}
+
+.transaction-empty > i {
+
+    font-size: 25px;
+
+    color: #cbd5e1;
+
+    margin-bottom: 12px;
+
+}
+
+.transaction-empty h4 {
+
+    margin: 0 0 6px;
+
+    color: #475569;
+
+    font-size: 13px;
+
+}
+
+.transaction-empty p {
+
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+/* =========================
+
+   TRANSACTION ROWS
+
+========================= \*/
+
+.transaction-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+.transaction-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 13px 15px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+}
+
+.transaction-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.transaction-icon {
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+.transaction-info strong {
+
+    display: block;
+
+    color: #334155;
+
+    font-size: 12px;
+
+}
+
+.transaction-info small {
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+.transaction-right {
+
+    text-align: right;
+
+}
+
+.transaction-amount {
+
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.transaction-status {
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+.status-success {
+
+    color: #059669;
+
+}
+
+.status-failed {
+
+    color: #dc2626;
+
+}
+
+.status-pending {
+
+    color: #d97706;
+
+}
+
+/* =========================
+
+   MODALS
+
+========================= \*/
+
+.modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(15,23,42,.65);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+    padding: 20px;
+
+    backdrop-filter: blur(5px);
+
+}
+
+.modal-overlay.show {
+
+    display: flex;
+
+}
+
+.card-modal {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 430px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 32px;
+
+    box-shadow: 0 30px 80px rgba(15,23,42,.25);
+
+    animation: modalOpen .25s ease;
+
+}
+
+.payment-modal {
+
+    max-width: 450px;
+
+}
+
+@keyframes modalOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(15px) scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+
+    }
+
+}
+
+.modal-close {
+
+    position: absolute;
+
+    right: 18px;
+
+    top: 18px;
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+}
+
+.modal-close:hover {
+
+    background: #fee2e2;
+
+    color: #ef4444;
+
+}
+
+.modal-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 21px;
+
+    margin-bottom: 18px;
+
+}
+
+.payment-modal-icon {
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+}
+
+.card-modal h2 {
+
+    margin: 0 0 7px;
+
+    color: #0f172a;
+
+    font-size: 24px;
+
+}
+
+.modal-description {
+
+    margin: 0 0 25px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+.modal-field {
+
+    margin-bottom: 18px;
+
+}
+
+.modal-field label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+.modal-field input,
+
+.modal-field select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: white;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition: .2s;
+
+}
+
+.modal-field input:focus,
+
+.modal-field select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 4px rgba(37,99,235,.08);
+
+}
+
+.card-security-note,
+
+.payment-security-note {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px;
+
+    margin-bottom: 20px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+
+}
+
+.card-security-note {
+
+    background: #f0fdf4;
+
+    color: #15803d;
+
+}
+
+.payment-security-note {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+.save-card-btn {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+
+        135deg,
+
+        #2563eb,
+
+        #3b82f6
+
+    );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+.save-card-btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 10px 22px rgba(37,99,235,.25);
+
+}
+
+.save-card-btn:disabled {
+
+    opacity: .7;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+/* =========================
+
+   RESPONSIVE
+
+========================= \*/
+
+@media (max-width: 900px) {
+
+    .summary-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    .dashboard-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .dashboard-header {
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+        flex-direction: column;
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .card-modal {
+
+        padding: 25px;
+
+    }
+
+    .transaction-row {
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+/* =========================
+
+   GLOBAL VARIABLES
+
+========================= \*/
+
+const accessToken =
+
+    sessionStorage.getItem("access_token");
+
+let currentUserId = null;
+
+let savedCards = [];
+
+/* =========================
+
+   LOGIN CHECK
+
+========================= \*/
+
+if (!accessToken) {
+
+    window.location.href = "/login/";
+
+}
+
+/* =========================
+
+   AUTH HEADER
+
+========================= \*/
+
+function authHeaders() {
+
+    return {
+
+        "Authorization":
+
+            `Bearer ${accessToken}`,
+
+        "Content-Type":
+
+            "application/json"
+
+    };
+
+}
+
+/* =========================
+
+   LOAD PROFILE
+
+========================= \*/
+
+async function loadProfile() {
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                "/api/accounts/profile/",
+
+                {
+
+                    method: "GET",
+
+                    headers: authHeaders()
+
+                }
+
+            );
+
+        if (response.status === 401) {
+
+            sessionStorage.clear();
+
+            window.location.href =
+
+                "/login/";
+
+            return;
+
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                "Unable to load profile."
+
+            );
+
+        }
+
+        const user =
+
+            await response.json();
+
+        currentUserId =
+
+            user.id;
+
+        document.getElementById(
+
+            "usernameText"
+
+        ).textContent =
+
+            user.username;
+
+    } catch (error) {
+
+        console.error(
+
+            "Profile error:",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* =========================
+
+   LOAD CARDS
+
+========================= \*/
+
+async function loadCards() {
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                "/api/cards/",
+
+                {
+
+                    method: "GET",
+
+                    headers: authHeaders()
+
+                }
+
+            );
+
+        if (response.status === 401) {
+
+            sessionStorage.clear();
+
+            window.location.href =
+
+                "/login/";
+
+            return;
+
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                "Unable to load cards."
+
+            );
+
+        }
+
+        savedCards =
+
+            await response.json();
+
+        document.getElementById(
+
+            "cardCount"
+
+        ).textContent =
+
+            savedCards.length;
+
+        renderCards(
+
+            savedCards
+
+        );
+
+        updatePaymentCards(
+
+            savedCards
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Card loading error:",
+
+            error
+
+        );
+
+        document.getElementById(
+
+            "cardsContainer"
+
+        ).innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+                <h4>
+
+                    Unable to load cards
+
+                </h4>
+
+                <p>
+
+                    Please refresh the page.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================
+
+   RENDER CARDS
+
+========================= \*/
+
+function renderCards(cards) {
+
+    const container =
+
+        document.getElementById(
+
+            "cardsContainer"
+
+        );
+
+    if (cards.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-regular fa-credit-card"></i>
+
+                </div>
+
+                <h4>
+
+                    No cards added yet
+
+                </h4>
+
+                <p>
+
+                    Add your credit or debit card
+
+                    to make payments quickly.
+
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+
+        cards.map(
+
+            card => `
+
+                <div class="saved-card">
+
+                    <div class="saved-card-top">
+
+                        <div class="saved-card-chip">
+
+                            <i class="fa-solid fa-microchip"></i>
+
+                        </div>
+
+                        <span class="card-type">
+
+                            ${card.card_type}
+
+                        </span>
+
+                    </div>
+
+                    <div class="saved-card-number">
+
+                        ${card.masked_card}
+
+                    </div>
+
+                    <div class="saved-card-bottom">
+
+                        <div>
+
+                            <small>
+
+                                LAST FOUR DIGITS
+
+                            </small>
+
+                            <strong>
+
+                                •••• ${card.last_four_digits}
+
+                            </strong>
+
+                        </div>
+
+                        <button
+
+                            type="button"
+
+                            class="delete-card-btn"
+
+                            onclick="deleteCard(${card.id})"
+
+                            title="Delete Card"
+
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `
+
+        ).join("");
+
+}
+
+/* =========================
+
+   PAYMENT CARD OPTIONS
+
+========================= \*/
+
+function updatePaymentCards(cards) {
+
+    const select =
+
+        document.getElementById(
+
+            "paymentCard"
+
+        );
+
+    if (!select) {
+
+        return;
+
+    }
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select a card
+
+        </option>
+
+    `;
+
+    cards.forEach(card => {
+
+        const option =
+
+            document.createElement(
+
+                "option"
+
+            );
+
+        option.value =
+
+            card.id;
+
+        option.textContent =
+
+            `${card.card_type} •••• ${card.last_four_digits}`;
+
+        select.appendChild(
+
+            option
+
+        );
+
+    });
+
+}
+
+/* =========================
+
+   OPEN ADD CARD MODAL
+
+========================= \*/
+
+function showCardMessage() {
+
+    const modal =
+
+        document.getElementById(
+
+            "cardModal"
+
+        );
+
+    if (modal) {
+
+        modal.classList.add(
+
+            "show"
+
+        );
+
+    }
+
+}
+
+/* =========================
+
+   CLOSE ADD CARD MODAL
+
+========================= \*/
+
+function closeCardModal() {
+
+    const modal =
+
+        document.getElementById(
+
+            "cardModal"
+
+        );
+
+    modal.classList.remove(
+
+        "show"
+
+    );
+
+    document.getElementById(
+
+        "cardForm"
+
+    ).reset();
+
+}
+
+/* =========================
+
+   ADD CARD
+
+========================= \*/
+
+const cardForm =
+
+    document.getElementById(
+
+        "cardForm"
+
+    );
+
+cardForm.addEventListener(
+
+    "submit",
+
+    async function(event) {
+
+        event.preventDefault();
+
+        const cardType =
+
+            document.getElementById(
+
+                "cardType"
+
+            ).value;
+
+        const cardNumber =
+
+            document.getElementById(
+
+                "cardNumber"
+
+            ).value
+
+            .replace(/\s/g, "");
+
+        if (!/^\d+$/.test(cardNumber)) {
+
+            alert(
+
+                "Card number must contain only digits."
+
+            );
+
+            return;
+
+        }
+
+        if (
+
+            cardNumber.length < 13 ||
+
+            cardNumber.length > 19
+
+        ) {
+
+            alert(
+
+                "Card number must be between 13 and 19 digits."
+
+            );
+
+            return;
+
+        }
+
+        const button =
+
+            document.getElementById(
+
+                "saveCardButton"
+
+            );
+
+        button.disabled = true;
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            Adding Card...
+
+        `;
+
+        try {
+
+            const response =
+
+                await fetch(
+
+                    "/api/cards/",
+
+                    {
+
+                        method: "POST",
+
+                        headers:
+
+                            authHeaders(),
+
+                        body:
+
+                            JSON.stringify({
+
+                                card_type:
+
+                                    cardType,
+
+                                card_number:
+
+                                    cardNumber
+
+                            })
+
+                    }
+
+                );
+
+            const data =
+
+                await response.json();
+
+            if (response.status === 401) {
+
+                sessionStorage.clear();
+
+                window.location.href =
+
+                    "/login/";
+
+                return;
+
+            }
+
+            if (response.ok) {
+
+                alert(
+
+                    "Card added successfully!"
+
+                );
+
+                closeCardModal();
+
+                await loadCards();
+
+                return;
+
+            }
+
+            if (data.card_number) {
+
+                alert(
+
+                    data.card_number.join(
+
+                        "\n"
+
+                    )
+
+                );
+
+            } else {
+
+                alert(
+
+                    data.detail ||
+
+                    "Unable to add card."
+
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+
+                "Add card error:",
+
+                error
+
+            );
+
+            alert(
+
+                "Unable to connect to the server."
+
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.innerHTML = `
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Card
+
+            `;
+
+        }
+
+    }
+
+);
+
+/* =========================
+
+   CARD NUMBER FORMATTING
+
+========================= \*/
+
+document
+
+    .getElementById(
+
+        "cardNumber"
+
+    )
+
+    .addEventListener(
+
+        "input",
+
+        function() {
+
+            let value =
+
+                this.value.replace(
+
+                    /\D/g,
+
+                    ""
+
+                );
+
+            value =
+
+                value
+
+                .substring(0, 19)
+
+                .replace(
+
+                    /(.{4})/g,
+
+                    "$1 "
+
+                )
+
+                .trim();
+
+            this.value =
+
+                value;
+
+        }
+
+    );
+
+/* =========================
+
+   DELETE CARD
+
+========================= \*/
+
+async function deleteCard(cardId) {
+
+    const confirmed =
+
+        confirm(
+
+            "Are you sure you want to delete this card?"
+
+        );
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `/api/cards/${cardId}/`,
+
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+
+                            `Bearer ${accessToken}`
+
+                    }
+
+                }
+
+            );
+
+        if (response.status === 401) {
+
+            sessionStorage.clear();
+
+            window.location.href =
+
+                "/login/";
+
+            return;
+
+        }
+
+        if (response.status === 204) {
+
+            alert(
+
+                "Card deleted successfully!"
+
+            );
+
+            await loadCards();
+
+            return;
+
+        }
+
+        alert(
+
+            "Unable to delete card."
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Delete card error:",
+
+            error
+
+        );
+
+        alert(
+
+            "Unable to connect to the server."
+
+        );
+
+    }
+
+}
+
+/* =========================
+
+   OPEN PAYMENT MODAL
+
+========================= \*/
+
+async function showPaymentMessage() {
+
+    if (
+
+        !savedCards ||
+
+        savedCards.length === 0
+
+    ) {
+
+        alert(
+
+            "Please add a card before making a payment."
+
+        );
+
+        return;
+
+    }
+
+    updatePaymentCards(
+
+        savedCards
+
+    );
+
+    const modal =
+
+        document.getElementById(
+
+            "paymentModal"
+
+        );
+
+    modal.classList.add(
+
+        "show"
+
+    );
+
+}
+
+/* =========================
+
+   CLOSE PAYMENT MODAL
+
+========================= \*/
+
+function closePaymentModal() {
+
+    const modal =
+
+        document.getElementById(
+
+            "paymentModal"
+
+        );
+
+    modal.classList.remove(
+
+        "show"
+
+    );
+
+    document.getElementById(
+
+        "paymentForm"
+
+    ).reset();
+
+}
+
+/* =========================
+   MAKE PAYMENT
+========================= */
+
+const paymentForm = document.getElementById("paymentForm");
+
+paymentForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!accessToken) {
+        alert("Please log in again.");
+        sessionStorage.clear();
+        window.location.href = "/login/";
+        return;
+    }
+
+    const cardId = document.getElementById("paymentCard").value;
+    const amount = Number(document.getElementById("paymentAmount").value);
+
+    if (!cardId) {
+        alert("Please select a card.");
+        return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    const button = document.getElementById("paymentButton");
+    button.disabled = true;
+    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/payments/", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                card_id: Number(cardId),
+                amount: amount
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            alert("Your session has expired. Please log in again.");
+            sessionStorage.clear();
+            window.location.href = "/login/";
+            return;
+        }
+
+        if (!response.ok) {
+            alert(data.detail || "Payment request failed.");
+            return;
+        }
+
+        if (data.status === "SUCCESS") {
+            alert(
+                `Payment successful!\n\n` +
+                `Transaction ID: ${data.transaction_id}\n` +
+                `Amount: ₹${Number(data.amount).toFixed(2)}`
+            );
+        } else {
+            alert(
+                `Payment failed!\n\n` +
+                `Transaction ID: ${data.transaction_id}\n` +
+                `Amount: ₹${Number(data.amount).toFixed(2)}`
+            );
+        }
+
+        closePaymentModal();
+        await loadTransactions();
+    } catch (error) {
+        console.error("Payment error:", error);
+        alert(
+            "Unable to connect to Payment API. " +
+            "Please make sure FastAPI is running on port 8001."
+        );
+    } finally {
+        button.disabled = false;
+        button.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Pay Now';
+    }
+});
+
+/* =========================
+
+   LOAD TRANSACTIONS
+
+========================= \*/
+
+async function loadTransactions() {
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                "/api/transactions/",
+
+                {
+
+                    method: "GET",
+
+                    headers: authHeaders()
+
+                }
+
+            );
+
+        if (response.status === 401) {
+
+            sessionStorage.clear();
+
+            window.location.href =
+
+                "/login/";
+
+            return;
+
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                "Unable to load transactions."
+
+            );
+
+        }
+
+        const transactions =
+
+            await response.json();
+
+        document.getElementById(
+
+            "transactionCount"
+
+        ).textContent =
+
+            transactions.length;
+
+        calculateTotalPayments(
+
+            transactions
+
+        );
+
+        renderRecentTransactions(
+
+            transactions
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Transaction loading error:",
+
+            error
+
+        );
+
+        document.getElementById(
+
+            "recentTransactions"
+
+        ).innerHTML = `
+
+            <div class="transaction-empty">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <h4>
+
+                    Unable to load transactions
+
+                </h4>
+
+                <p>
+
+                    Please refresh the page.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================
+
+   TOTAL SUCCESSFUL PAYMENTS
+
+========================= \*/
+
+function calculateTotalPayments(
+
+    transactions
+
+) {
+
+    const total =
+
+        transactions
+
+            .filter(
+
+                transaction =>
+
+                    transaction.status ===
+
+                    "SUCCESS"
+
+            )
+
+            .reduce(
+
+                (
+
+                    sum,
+
+                    transaction
+
+                ) =>
+
+                    sum +
+
+                    Number(
+
+                        transaction.amount
+
+                    ),
+
+                0
+
+            );
+
+    document.getElementById(
+
+        "totalPayments"
+
+    ).textContent =
+
+        `₹${total.toFixed(2)}`;
+
+}
+
+/* =========================
+
+   RECENT TRANSACTIONS
+
+========================= \*/
+
+function renderRecentTransactions(
+
+    transactions
+
+) {
+
+    const container =
+
+        document.getElementById(
+
+            "recentTransactions"
+
+        );
+
+    if (
+
+        !transactions ||
+
+        transactions.length === 0
+
+    ) {
+
+        container.innerHTML = `
+
+            <div class="transaction-empty">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                <h4>
+
+                    No transactions yet
+
+                </h4>
+
+                <p>
+
+                    Your recent payment activity
+
+                    will appear here.
+
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    const recent =
+
+        transactions.slice(
+
+            0,
+
+            5
+
+        );
+
+    container.innerHTML = `
+
+        <div class="transaction-list">
+
+            ${
+
+                recent.map(
+
+                    transaction => {
+
+                        const statusClass =
+
+                            "status-" +
+
+                            transaction.status
+
+                                .toLowerCase();
+
+                        return `
+
+                            <div class="transaction-row">
+
+                                <div class="transaction-left">
+
+                                    <div class="transaction-icon">
+
+                                        <i class="fa-solid fa-receipt"></i>
+
+                                    </div>
+
+                                    <div class="transaction-info">
+
+                                        <strong>
+
+                                            •••• ${transaction.card_number}
+
+                                        </strong>
+
+                                        <small>
+
+                                            ${formatTransactionDate(
+
+                                                transaction.created_at
+
+                                            )}
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="transaction-right">
+
+                                    <span class="transaction-amount">
+
+                                        ₹${Number(
+
+                                            transaction.amount
+
+                                        ).toFixed(2)}
+
+                                    </span>
+
+                                    <span
+
+                                        class="transaction-status ${statusClass}"
+
+                                    >
+
+                                        ${transaction.status}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                ).join("")
+
+            }
+
+        </div>
+
+    `;
+
+}
+
+/* =========================
+
+   FORMAT DATE
+
+========================= \*/
+
+function formatTransactionDate(
+
+    dateString
+
+) {
+
+    const date =
+
+        new Date(
+
+            dateString
+
+        );
+
+    return date.toLocaleString(
+
+        "en-IN",
+
+        {
+
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric",
+
+            hour: "2-digit",
+
+            minute: "2-digit"
+
+        }
+
+    );
+
+}
+
+/* =========================
+
+   VIEW ALL TRANSACTIONS
+
+========================= \*/
+
+function showTransactionMessage() {
+
+    window.location.href =
+
+        "/transactions/";
+
+}
+
+/* =========================
+
+   LOGOUT
+
+========================= \*/
+
+async function logoutUser() {
+
+    const refreshToken =
+
+        sessionStorage.getItem(
+
+            "refresh_token"
+
+        );
+
+    if (!refreshToken) {
+
+        sessionStorage.clear();
+
+        window.location.href =
+
+            "/login/";
+
+        return;
+
+    }
+
+    try {
+
+        await fetch(
+
+            "/api/accounts/logout/",
+
+            {
+
+                method: "POST",
+
+                headers: authHeaders(),
+
+                body:
+
+                    JSON.stringify({
+
+                        refresh:
+
+                            refreshToken
+
+                    })
+
+            }
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Logout error:",
+
+            error
+
+        );
+
+    }
+
+    sessionStorage.clear();
+
+    window.location.href =
+
+        "/login/";
+
+}
+
+/* =========================
+
+   CLOSE MODALS OUTSIDE CLICK
+
+========================= \*/
+
+document
+
+    .getElementById("cardModal")
+
+    .addEventListener(
+
+        "click",
+
+        function(event) {
+
+            if (
+
+                event.target ===
+
+                this
+
+            ) {
+
+                closeCardModal();
+
+            }
+
+        }
+
+    );
+
+document
+
+    .getElementById("paymentModal")
+
+    .addEventListener(
+
+        "click",
+
+        function(event) {
+
+            if (
+
+                event.target ===
+
+                this
+
+            ) {
+
+                closePaymentModal();
+
+            }
+
+        }
+
+    );
+
+/* =========================
+
+   START DASHBOARD
+
+========================= \*/
+
+async function startDashboard() {
+
+    await loadProfile();
+
+    await loadCards();
+
+    await loadTransactions();
+
+}
+
+startDashboard();
+
+</script>
+
+{% endblock %}

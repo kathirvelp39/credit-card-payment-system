@@ -1,0 +1,240 @@
+﻿{
+  "info": {
+    "name": "CreditPay API Testing",
+    "description": "API tests for Django authentication, cards, FastAPI payments, and transactions.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "django_url", "value": "http://127.0.0.1:8000" },
+    { "key": "payment_url", "value": "http://127.0.0.1:8001" },
+    { "key": "username", "value": "creditpay_test_user" },
+    { "key": "email", "value": "creditpay_test@example.com" },
+    { "key": "password", "value": "TestPass12345!" },
+    { "key": "access_token", "value": "" },
+    { "key": "refresh_token", "value": "" },
+    { "key": "card_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{django_url}}/api/accounts/register/"
+          }
+        },
+        {
+          "name": "Login - Get JWT Tokens",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json();",
+                  "  if (data.access) pm.collectionVariables.set('access_token', data.access);",
+                  "  if (data.refresh) pm.collectionVariables.set('refresh_token', data.refresh);",
+                  "}",
+                  "pm.test('Login returns success', function () { pm.expect(pm.response.code).to.eql(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{django_url}}/api/token/"
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/accounts/profile/"
+          }
+        },
+        {
+          "name": "Refresh JWT Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json();",
+                  "  if (data.access) pm.collectionVariables.set('access_token', data.access);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": "{{django_url}}/api/token/refresh/"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": "{{django_url}}/api/accounts/logout/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Card Management",
+      "item": [
+        {
+          "name": "Create Card",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  if (data.id) pm.collectionVariables.set('card_id', String(data.id));",
+                  "}",
+                  "pm.test('Card created successfully', function () { pm.expect(pm.response.code).to.eql(201); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"card_type\": \"CREDIT\",\n  \"card_number\": \"4242424242424242\"\n}"
+            },
+            "url": "{{django_url}}/api/cards/"
+          }
+        },
+        {
+          "name": "List My Cards",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/cards/"
+          }
+        },
+        {
+          "name": "Delete Card",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/cards/{{card_id}}/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. FastAPI Payments",
+      "item": [
+        {
+          "name": "Payment API Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{payment_url}}/"
+          }
+        },
+        {
+          "name": "Make Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"card_id\": {{card_id}},\n  \"amount\": 500\n}"
+            },
+            "url": "{{payment_url}}/payments/"
+          }
+        },
+        {
+          "name": "Payment Without Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"card_id\": {{card_id}},\n  \"amount\": 500\n}"
+            },
+            "url": "{{payment_url}}/payments/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Transaction History and Filters",
+      "item": [
+        {
+          "name": "List My Transactions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/transactions/"
+          }
+        },
+        {
+          "name": "Filter Transactions by Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/transactions/?status=SUCCESS"
+          }
+        },
+        {
+          "name": "Filter Transactions by Amount",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/transactions/?min_amount=100&max_amount=5000"
+          }
+        },
+        {
+          "name": "Filter Transactions by Date",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "{{django_url}}/api/transactions/?from_date=2026-01-01&to_date=2026-12-31"
+          }
+        }
+      ]
+    }
+  ]
+}

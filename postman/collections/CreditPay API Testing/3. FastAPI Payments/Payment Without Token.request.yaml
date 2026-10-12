@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{payment_url}}/payments/"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "card_id": {{card_id}},
+      "amount": 500
+    }
+order: 3000

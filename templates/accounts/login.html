@@ -1,0 +1,670 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login | CreditPay{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .auth-page {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 1050px;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.12);
+    }
+
+    .auth-banner {
+        position: relative;
+        padding: 55px;
+        color: white;
+
+        background:
+            radial-gradient(
+                circle at 80% 20%,
+                rgba(96,165,250,.35),
+                transparent 25%
+            ),
+            linear-gradient(
+                145deg,
+                #07111f,
+                #123b72
+            );
+
+        overflow: hidden;
+    }
+
+    .auth-banner::before,
+    .auth-banner::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.05);
+    }
+
+    .auth-banner::before {
+        width: 300px;
+        height: 300px;
+        right: -100px;
+        bottom: -120px;
+    }
+
+    .auth-banner::after {
+        width: 180px;
+        height: 180px;
+        left: -70px;
+        top: -70px;
+    }
+
+    .security-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 8px 13px;
+
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: 50px;
+
+        background: rgba(255,255,255,.07);
+
+        font-size: 11px;
+
+        margin-bottom: 45px;
+    }
+
+    .auth-banner h1 {
+        font-size: 42px;
+        line-height: 1.15;
+
+        margin-bottom: 18px;
+
+        letter-spacing: -1.5px;
+    }
+
+    .auth-banner h1 span {
+        color: #60a5fa;
+    }
+
+    .auth-banner p {
+        color: #cbd5e1;
+
+        line-height: 1.7;
+
+        font-size: 14px;
+
+        max-width: 430px;
+    }
+
+    .feature-list {
+        margin-top: 35px;
+
+        display: grid;
+
+        gap: 17px;
+    }
+
+    .feature {
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+
+        color: #dbeafe;
+
+        font-size: 13px;
+    }
+
+    .feature i {
+        width: 30px;
+        height: 30px;
+
+        border-radius: 9px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(96,165,250,.12);
+
+        color: #60a5fa;
+    }
+
+    .auth-form {
+        padding: 55px 50px;
+    }
+
+    .form-heading {
+        margin-bottom: 32px;
+    }
+
+    .form-heading small {
+        color: #64748b;
+
+        font-size: 12px;
+    }
+
+    .form-heading h2 {
+        font-size: 28px;
+
+        margin: 7px 0;
+
+        color: #0f172a;
+    }
+
+    .form-heading p {
+        color: #64748b;
+
+        font-size: 13px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+
+        font-size: 12px;
+
+        font-weight: 600;
+
+        color: #334155;
+
+        margin-bottom: 8px;
+    }
+
+    .input-box {
+        position: relative;
+    }
+
+    .input-box i {
+        position: absolute;
+
+        left: 15px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        color: #94a3b8;
+
+        font-size: 14px;
+    }
+
+    .input-box input {
+        width: 100%;
+
+        padding: 14px 15px 14px 43px;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 11px;
+
+        outline: none;
+
+        font-family: inherit;
+
+        font-size: 13px;
+
+        transition: .2s;
+    }
+
+    .input-box input:focus {
+        border-color: #3b82f6;
+
+        box-shadow:
+            0 0 0 4px rgba(59,130,246,.08);
+    }
+
+    .login-btn {
+        width: 100%;
+
+        margin-top: 8px;
+
+        padding: 14px;
+
+        border: none;
+
+        border-radius: 11px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #3b82f6
+            );
+
+        color: white;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        font-family: inherit;
+
+        transition: .25s;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 12px 25px rgba(37,99,235,.28);
+    }
+
+    .login-btn:disabled {
+        opacity: 0.7;
+
+        cursor: not-allowed;
+
+        transform: none;
+
+        box-shadow: none;
+    }
+
+    .auth-footer {
+        text-align: center;
+
+        margin-top: 25px;
+
+        color: #64748b;
+
+        font-size: 12px;
+    }
+
+    .auth-footer a {
+        color: #2563eb;
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 800px) {
+
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-banner {
+            display: none;
+        }
+
+        .auth-form {
+            padding: 40px 30px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block nav_links %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="auth-page">
+
+    <div class="auth-wrapper">
+
+
+        <!-- LEFT SIDE -->
+
+        <section class="auth-banner">
+
+            <div class="security-badge">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                Secure Payment Platform
+
+            </div>
+
+
+            <h1>
+
+                Manage your money
+
+                <span>smarter.</span>
+
+            </h1>
+
+
+            <p>
+
+                Securely manage your credit cards,
+                make payments, and keep track of
+                every transaction from one place.
+
+            </p>
+
+
+            <div class="feature-list">
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Secure JWT authentication
+
+                </div>
+
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-credit-card"></i>
+
+                    Safe card management
+
+                </div>
+
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    Simple transaction tracking
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="auth-form">
+
+            <div class="form-heading">
+
+                <small>
+                    WELCOME BACK
+                </small>
+
+
+                <h2>
+                    Sign in
+                </h2>
+
+
+                <p>
+                    Enter your account details to continue.
+                </p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <!-- USERNAME -->
+
+                <div class="input-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+
+                    <div class="input-box">
+
+                        <i class="fa-regular fa-user"></i>
+
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="input-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginButton"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    &nbsp;
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+
+                Don't have an account?
+
+                <a href="/register/">
+                    Create Account
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const username =
+                document
+                    .getElementById("username")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+
+            const loginButton =
+                document.getElementById("loginButton");
+
+
+            /*
+             * Show loading state
+             */
+
+            loginButton.disabled = true;
+
+            loginButton.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                &nbsp;
+                Signing In...
+            `;
+
+
+            try {
+
+                /*
+                 * Send username and password
+                 * to Django JWT endpoint.
+                 */
+
+                const response =
+                    await fetch(
+                        "/api/token/",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                username: username,
+                                password: password
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                /*
+                 * Login successful
+                 */
+
+                if (response.ok) {
+
+                    /*
+                     * Store JWT tokens
+                     */
+
+                    sessionStorage.setItem(
+                        "access_token",
+                        data.access
+                    );
+
+                    sessionStorage.setItem(
+                        "refresh_token",
+                        data.refresh
+                    );
+
+
+                    /*
+                     * Redirect to dashboard
+                     */
+
+                    window.location.href = "/";
+
+                    return;
+                }
+
+
+                /*
+                 * Login failed
+                 */
+
+                if (response.status === 401) {
+
+                    alert(
+                        "Invalid username or password."
+                    );
+
+                } else {
+
+                    alert(
+                        "Login failed. Please try again."
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to connect to the server."
+                );
+
+            } finally {
+
+                /*
+                 * Restore button
+                 */
+
+                loginButton.disabled = false;
+
+                loginButton.innerHTML = `
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    &nbsp;
+                    Sign In
+                `;
+
+            }
+
+        }
+    );
+
+</script>
+
+{% endblock %}

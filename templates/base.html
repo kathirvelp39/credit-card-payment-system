@@ -1,0 +1,542 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            CreditPay
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'style.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="nav-wrapper">
+
+
+        <!-- BRAND -->
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="brand"
+        >
+
+            <span class="brand-icon">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+            </span>
+
+            <span>
+                Credit<span>Pay</span>
+            </span>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="nav-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="nav-item
+                {% if request.path == '/' %}
+                    active
+                {% endif %}"
+            >
+
+                <i class="fa-solid fa-house"></i>
+
+                Dashboard
+
+            </a>
+
+
+            <!-- MY CARDS -->
+
+            <a
+                href="{% url 'dashboard' %}#cards"
+                class="nav-item"
+            >
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                My Cards
+
+            </a>
+
+
+            <!-- TRANSACTIONS -->
+
+            <a
+                href="{% url 'transactions-page' %}"
+                class="nav-item
+                {% if request.path == '/transactions/' %}
+                    active
+                {% endif %}"
+            >
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                Transactions
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- NAV ACTIONS -->
+
+        <div class="nav-actions">
+
+
+            <!-- NOTIFICATION -->
+
+            <button
+                type="button"
+                class="notification-btn"
+                onclick="showNotification()"
+            >
+
+                <i class="fa-regular fa-bell"></i>
+
+                <span class="notification-dot"></span>
+
+            </button>
+
+
+            <!-- USER -->
+
+            <div
+                class="user-profile"
+                onclick="toggleProfileMenu()"
+            >
+
+                <div class="avatar">
+                    K
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="navUsername">
+                        Kathir
+                    </strong>
+
+                    <small>
+                        Premium User
+                    </small>
+
+                </div>
+
+                <i
+                    class="fa-solid fa-chevron-down"
+                ></i>
+
+            </div>
+
+
+            <!-- PROFILE MENU -->
+
+            <div
+                id="profileMenu"
+                class="profile-menu"
+            >
+
+                <a
+                    href="{% url 'dashboard' %}"
+                >
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a
+                    href="{% url 'dashboard' %}#cards"
+                >
+
+                    <i class="fa-solid fa-credit-card"></i>
+
+                    My Cards
+
+                </a>
+
+
+                <a
+                    href="{% url 'transactions-page' %}"
+                >
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transactions
+
+                </a>
+
+
+                <button
+                    type="button"
+                    onclick="logoutUser()"
+                >
+
+                    <i
+                        class="fa-solid fa-right-from-bracket"
+                    ></i>
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="page-container">
+
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div
+                class="message {{ message.tags }}"
+            >
+
+                <i
+                    class="fa-solid fa-circle-check"
+                ></i>
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    {% block content %}
+    {% endblock %}
+
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div>
+
+            <strong>
+
+                <i
+                    class="fa-solid fa-shield-halved"
+                ></i>
+
+                CreditPay
+
+            </strong>
+
+            <p>
+                Secure and simple credit card payments.
+            </p>
+
+        </div>
+
+
+        <div class="security-status">
+
+            <span class="status-dot"></span>
+
+            Secure Connection
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- ================= GLOBAL JAVASCRIPT ================= -->
+
+<script>
+
+function showNotification() {
+
+    alert(
+        "You have no new notifications."
+    );
+
+}
+
+
+function toggleProfileMenu() {
+
+    const menu =
+        document.getElementById(
+            "profileMenu"
+        );
+
+    menu.classList.toggle("show");
+
+}
+
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const profile =
+            document.querySelector(
+                ".user-profile"
+            );
+
+        const menu =
+            document.getElementById(
+                "profileMenu"
+            );
+
+        if (
+            profile &&
+            menu &&
+            !profile.contains(event.target) &&
+            !menu.contains(event.target)
+        ) {
+
+            menu.classList.remove("show");
+
+        }
+
+    }
+);
+
+
+async function logoutUser() {
+
+    const accessToken =
+        sessionStorage.getItem(
+            "access_token"
+        );
+
+    const refreshToken =
+        sessionStorage.getItem(
+            "refresh_token"
+        );
+
+
+    if (!refreshToken) {
+
+        sessionStorage.clear();
+
+        window.location.href =
+            "/login/";
+
+        return;
+
+    }
+
+
+    try {
+
+        await fetch(
+            "/api/accounts/logout/",
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Authorization":
+                        `Bearer ${accessToken}`,
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    refresh: refreshToken
+
+                })
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+
+    sessionStorage.clear();
+
+    window.location.href =
+        "/login/";
+
+}
+
+</script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+<!-- ================= PROFILE MENU CSS ================= -->
+
+<style>
+
+.nav-actions {
+    position: relative;
+}
+
+
+.user-profile {
+    cursor: pointer;
+    user-select: none;
+}
+
+
+.profile-menu {
+
+    position: absolute;
+
+    top: 65px;
+
+    right: 0;
+
+    width: 210px;
+
+    background: #111a2b;
+
+    border: 1px solid #263653;
+
+    border-radius: 12px;
+
+    padding: 8px;
+
+    display: none;
+
+    z-index: 9999;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0, 0, 0, 0.3);
+
+}
+
+
+.profile-menu.show {
+    display: block;
+}
+
+
+.profile-menu a,
+.profile-menu button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 12px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #dbe4f2;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    text-align: left;
+
+}
+
+
+.profile-menu a:hover,
+.profile-menu button:hover {
+
+    background: #1c2940;
+
+    color: #4f9cff;
+
+}
+
+
+.profile-menu button {
+
+    color: #ff6b7a;
+
+    border-top:
+        1px solid #263653;
+
+    margin-top: 5px;
+
+}
+
+</style>
+
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+﻿venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+*.log
+db.sqlite3
+creditpay_db.sql
+config/settings.py.backup

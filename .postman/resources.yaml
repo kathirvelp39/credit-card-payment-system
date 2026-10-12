@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: 73866062-2b74-4a1d-86e3-1b70120b59fd
+
+cloudResources:
+  collections:
+    ../postman/collections/CreditPay API Testing: abb9f18d-1c8d-4cf8-a6e9-43141604bd10
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

@@ -1,0 +1,11 @@
+$kind: collection
+description: API tests for Django authentication, cards, FastAPI payments, and transactions.
+variables:
+  django_url: http://127.0.0.1:8000
+  payment_url: http://127.0.0.1:8001
+  username: creditpay_test_user
+  email: creditpay_test@example.com
+  password: TestPass12345!
+  access_token: ""
+  refresh_token: ""
+  card_id: "1"

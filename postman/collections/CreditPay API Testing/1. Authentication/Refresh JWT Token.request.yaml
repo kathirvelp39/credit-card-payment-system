@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{django_url}}/api/token/refresh/"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "refresh": "{{refresh_token}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 200) {
+        const data = pm.response.json();
+        if (data.access) pm.collectionVariables.set('access_token', data.access);
+      }
+    language: text/javascript
+order: 4000

@@ -1,0 +1,1143 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Transactions - CreditPay
+{% endblock %}
+
+
+{% block content %}
+
+<section class="transactions-page">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
+
+        <div>
+
+            <p class="page-label">
+                PAYMENT ACTIVITY
+            </p>
+
+            <h1>
+                Transaction History
+            </h1>
+
+            <p class="page-subtitle">
+                View and filter your credit card payments.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FILTERS ================= -->
+
+    <div class="filter-card">
+
+
+        <!-- STATUS -->
+
+        <div class="filter-group">
+
+            <label for="statusFilter">
+                Status
+            </label>
+
+            <select id="statusFilter">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="SUCCESS">
+                    Success
+                </option>
+
+                <option value="FAILED">
+                    Failed
+                </option>
+
+                <option value="PENDING">
+                    Pending
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- MINIMUM AMOUNT -->
+
+        <div class="filter-group">
+
+            <label for="minAmount">
+                Minimum Amount
+            </label>
+
+            <input
+                type="number"
+                id="minAmount"
+                placeholder="₹0"
+                min="0"
+            >
+
+        </div>
+
+
+        <!-- MAXIMUM AMOUNT -->
+
+        <div class="filter-group">
+
+            <label for="maxAmount">
+                Maximum Amount
+            </label>
+
+            <input
+                type="number"
+                id="maxAmount"
+                placeholder="₹10000"
+                min="0"
+            >
+
+        </div>
+
+
+        <!-- FROM DATE -->
+
+        <div class="filter-group">
+
+            <label for="fromDate">
+                From Date
+            </label>
+
+            <input
+                type="date"
+                id="fromDate"
+            >
+
+        </div>
+
+
+        <!-- TO DATE -->
+
+        <div class="filter-group">
+
+            <label for="toDate">
+                To Date
+            </label>
+
+            <input
+                type="date"
+                id="toDate"
+            >
+
+        </div>
+
+
+        <!-- APPLY -->
+
+        <button
+            type="button"
+            class="filter-btn"
+            onclick="loadTransactions()"
+        >
+
+            <i class="fa-solid fa-filter"></i>
+
+            Apply Filters
+
+        </button>
+
+
+        <!-- CLEAR -->
+
+        <button
+            type="button"
+            class="clear-btn"
+            onclick="clearFilters()"
+        >
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+            Clear
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= MESSAGE ================= -->
+
+    <div id="message"></div>
+
+
+    <!-- ================= TRANSACTION TABLE ================= -->
+
+    <div class="transactions-card">
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Card
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="transactionTable">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="loading-state"
+                        >
+
+                            <i
+                                class="fa-solid fa-spinner fa-spin"
+                            ></i>
+
+                            Loading transactions...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+{% endblock %}
+
+
+
+{% block extra_css %}
+
+<style>
+
+
+/* ================= PAGE ================= */
+
+.transactions-page {
+
+    padding: 40px 0 60px;
+
+}
+
+
+.page-header {
+
+    margin-bottom: 28px;
+
+}
+
+
+.page-label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    color: #4f9cff;
+
+    margin-bottom: 8px;
+
+}
+
+
+.page-header h1 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+}
+
+
+.page-subtitle {
+
+    color: #8b96a8;
+
+    margin-top: 8px;
+
+}
+
+
+/* ================= FILTER ================= */
+
+.filter-card {
+
+    display: flex;
+
+    gap: 16px;
+
+    align-items: end;
+
+    flex-wrap: wrap;
+
+    padding: 22px;
+
+    margin-bottom: 25px;
+
+    background: #111a2b;
+
+    border: 1px solid #263653;
+
+    border-radius: 16px;
+
+}
+
+
+.filter-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.filter-group label {
+
+    font-size: 13px;
+
+    color: #9ba8bc;
+
+}
+
+
+.filter-group input,
+.filter-group select {
+
+    min-width: 160px;
+
+    padding: 11px 13px;
+
+    border-radius: 9px;
+
+    border: 1px solid #30415e;
+
+    background: #0b1220;
+
+    color: white;
+
+    outline: none;
+
+}
+
+
+.filter-group input:focus,
+.filter-group select:focus {
+
+    border-color: #2778ff;
+
+}
+
+
+/* ================= BUTTONS ================= */
+
+.filter-btn,
+.clear-btn {
+
+    padding: 11px 18px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.filter-btn {
+
+    border: none;
+
+    background: #2778ff;
+
+    color: white;
+
+}
+
+
+.filter-btn:hover {
+
+    background: #1769ed;
+
+}
+
+
+.clear-btn {
+
+    border: 1px solid #30415e;
+
+    background: transparent;
+
+    color: #b8c3d4;
+
+}
+
+
+.clear-btn:hover {
+
+    background: #1c2940;
+
+    color: white;
+
+}
+
+
+/* ================= MESSAGE ================= */
+
+.error-message {
+
+    color: #ff6b7a;
+
+    background: rgba(255, 92, 108, 0.08);
+
+    border: 1px solid rgba(255, 92, 108, 0.25);
+
+    padding: 12px 15px;
+
+    border-radius: 9px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ================= TABLE ================= */
+
+.transactions-card {
+
+    background: #111a2b;
+
+    border: 1px solid #263653;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+}
+
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+th,
+td {
+
+    padding: 18px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #263653;
+
+}
+
+
+th {
+
+    color: #8f9db2;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+td {
+
+    color: #e7edf7;
+
+    font-size: 14px;
+
+}
+
+
+/* ================= STATUS ================= */
+
+.status-success {
+
+    color: #32d583;
+
+    font-weight: 700;
+
+}
+
+
+.status-failed {
+
+    color: #ff5c6c;
+
+    font-weight: 700;
+
+}
+
+
+.status-pending {
+
+    color: #f5b942;
+
+    font-weight: 700;
+
+}
+
+
+/* ================= EMPTY ================= */
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 55px;
+
+    color: #8f9db2;
+
+}
+
+
+.loading-state {
+
+    text-align: center;
+
+    padding: 55px;
+
+    color: #8f9db2;
+
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .filter-group input,
+    .filter-group select {
+
+        min-width: 140px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .transactions-page {
+
+        padding: 25px 0;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 26px;
+
+    }
+
+
+    .filter-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .filter-group input,
+    .filter-group select {
+
+        width: 100%;
+
+    }
+
+
+    .filter-btn,
+    .clear-btn {
+
+        justify-content: center;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script>
+
+
+/* ================= LOAD TRANSACTIONS ================= */
+
+async function loadTransactions() {
+
+
+    const token =
+        sessionStorage.getItem(
+            "access_token"
+        );
+
+
+    if (!token) {
+
+        window.location.href =
+            "/login/";
+
+        return;
+
+    }
+
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const minAmount =
+        document.getElementById(
+            "minAmount"
+        ).value;
+
+
+    const maxAmount =
+        document.getElementById(
+            "maxAmount"
+        ).value;
+
+
+    const fromDate =
+        document.getElementById(
+            "fromDate"
+        ).value;
+
+
+    const toDate =
+        document.getElementById(
+            "toDate"
+        ).value;
+
+
+    const params =
+        new URLSearchParams();
+
+
+    if (status) {
+
+        params.append(
+            "status",
+            status
+        );
+
+    }
+
+
+    if (minAmount) {
+
+        params.append(
+            "min_amount",
+            minAmount
+        );
+
+    }
+
+
+    if (maxAmount) {
+
+        params.append(
+            "max_amount",
+            maxAmount
+        );
+
+    }
+
+
+    let url =
+        "/api/transactions/";
+
+
+    if (params.toString()) {
+
+        url +=
+            "?" +
+            params.toString();
+
+    }
+
+
+    const table =
+        document.getElementById(
+            "transactionTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="loading-state"
+            >
+
+                <i
+                    class="fa-solid fa-spinner fa-spin"
+                ></i>
+
+                Loading transactions...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    document.getElementById(
+        "message"
+    ).innerHTML = "";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${token}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            sessionStorage.clear();
+
+            window.location.href =
+                "/login/";
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Failed to load transactions."
+            );
+
+        }
+
+
+        /*
+         * Date filtering is done here
+         * because the backend currently
+         * supports status and amount filters.
+         */
+
+        const filteredData =
+            filterByDate(
+                data,
+                fromDate,
+                toDate
+            );
+
+
+        renderTransactions(
+            filteredData
+        );
+
+
+    } catch (error) {
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-state"
+                >
+
+                    Unable to load transactions.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        document.getElementById(
+            "message"
+        ).innerHTML = `
+
+            <div class="error-message">
+
+                ${error.message}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ================= DATE FILTER ================= */
+
+function filterByDate(
+    transactions,
+    fromDate,
+    toDate
+) {
+
+
+    if (
+        !fromDate &&
+        !toDate
+    ) {
+
+        return transactions;
+
+    }
+
+
+    return transactions.filter(
+        transaction => {
+
+            const transactionDate =
+                new Date(
+                    transaction.created_at
+                );
+
+
+            if (fromDate) {
+
+                const startDate =
+                    new Date(
+                        fromDate +
+                        "T00:00:00"
+                    );
+
+
+                if (
+                    transactionDate <
+                    startDate
+                ) {
+
+                    return false;
+
+                }
+
+            }
+
+
+            if (toDate) {
+
+                const endDate =
+                    new Date(
+                        toDate +
+                        "T23:59:59"
+                    );
+
+
+                if (
+                    transactionDate >
+                    endDate
+                ) {
+
+                    return false;
+
+                }
+
+            }
+
+
+            return true;
+
+        }
+    );
+
+}
+
+
+/* ================= RENDER ================= */
+
+function renderTransactions(
+    transactions
+) {
+
+
+    const table =
+        document.getElementById(
+            "transactionTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if (
+        transactions.length === 0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-state"
+                >
+
+                    <i
+                        class="fa-solid fa-receipt"
+                    ></i>
+
+                    <br><br>
+
+                    No transactions found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    transactions.forEach(
+        transaction => {
+
+
+            const statusClass =
+                "status-" +
+                transaction.status
+                    .toLowerCase();
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    #${transaction.id}
+                </td>
+
+
+                <td>
+                    •••• ${transaction.card_number}
+                </td>
+
+
+                <td>
+                    ${transaction.card_type}
+                </td>
+
+
+                <td>
+                    ₹${Number(
+                        transaction.amount
+                    ).toFixed(2)}
+                </td>
+
+
+                <td
+                    class="${statusClass}"
+                >
+
+                    ${transaction.status}
+
+                </td>
+
+
+                <td>
+                    ${formatDate(
+                        transaction.created_at
+                    )}
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* ================= DATE FORMAT ================= */
+
+function formatDate(
+    dateString
+) {
+
+
+    const date =
+        new Date(dateString);
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* ================= CLEAR FILTERS ================= */
+
+function clearFilters() {
+
+
+    document.getElementById(
+        "statusFilter"
+    ).value = "";
+
+
+    document.getElementById(
+        "minAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "maxAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "fromDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "toDate"
+    ).value = "";
+
+
+    loadTransactions();
+
+}
+
+
+/* ================= INITIAL LOAD ================= */
+
+loadTransactions();
+
+</script>
+
+{% endblock %}
